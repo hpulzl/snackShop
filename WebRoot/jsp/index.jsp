@@ -64,7 +64,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var addItem = "<a href='javascript:void(0)' onclick='addShopCart(\""+obj.pdid+"\",\""+obj.disprice+"\")' class='item_add' id='addShop'>加入购物车</a>";
 				var selectInfoUrl = "<a href='${pageContext.request.contextPath }/product/selectByPdid.action?id="+obj.pdid+"'>"+obj.pdname+"</a>";
 				var imageUrl = "<a href='${pageContext.request.contextPath }/product/selectByPdid.action?id="+obj.pdid+"'>"+
-						"<img class='img-responsive' src='/pic/"+obj.pdimage+"' alt='' /></a>";
+						"<img class='img-responsive' src='/pic/"+obj.pdimage+"' alt='' style='height:180px'/></a>";
 				var content = "<div class='col-md-3 col-md2'>"+
 				"<div class='col-md1 simpleCart_shelfItem'>"+
 				imageUrl+

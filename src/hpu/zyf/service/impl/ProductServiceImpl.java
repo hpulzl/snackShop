@@ -14,6 +14,7 @@ import hpu.zyf.util.MyRowBounds;
 import hpu.zyf.util.UUIDUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class ProductServiceImpl implements ProductService{
 			throw new CustomException("插入-->商品信息不能为空");
 		}
 		pd.setPdid(UUIDUtil.getUUId());
+		pd.setCreatetime(new Date());
 		if(pdm.insert(pd)>0){
 			return true;
 		}
