@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hpu.zyf.mapper.OrderdetailMapper" >
+  <resultMap id="BaseResultMap" type="hpu.zyf.entity.Orderdetail" >
+    <id column="odid" property="odid" jdbcType="VARCHAR" />
+    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+    <result column="odnumber" property="odnumber" jdbcType="INTEGER" />
+    <result column="odprice" property="odprice" jdbcType="REAL" />
+  </resultMap>
+   <resultMap id="UserAndProductResultMap" type="hpu.zyf.entity.vo.UserCustom" >
+   <!-- 一个用户 -->
+	    <id column="userid" property="userid" jdbcType="VARCHAR" />
+	    <result column="username" property="username" jdbcType="VARCHAR" />
+	    <result column="userpassword" property="userpassword" jdbcType="VARCHAR" />
+	    <result column="userphone" property="userphone" jdbcType="VARCHAR" />
+	    <!-- 对应多个订单信息 -->
+	    <collection property="userOrderList" ofType="hpu.zyf.entity.vo.UserOrderCustom">
+		    <id column="orderid" property="orderid" jdbcType="VARCHAR" />
+		    <result column="userid" property="userid" jdbcType="VARCHAR" />
+		    <result column="purchaseid" property="purchaseid" jdbcType="VARCHAR" />
+		    <result column="ordertime" property="ordertime" jdbcType="DATE" />
+		    <result column="ispay" property="ispay" jdbcType="BIT" />
+		    <association property="orderdetails" javaType="hpu.zyf.entity.vo.OrderdetailCustom">
+		    	 <id column="odid" property="odid" jdbcType="VARCHAR" />
+			    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+			    <result column="odnumber" property="odnumber" jdbcType="INTEGER" />
+			    <result column="odprice" property="odprice" jdbcType="REAL" />
+			    <association property="productCustom" javaType="hpu.zyf.entity.vo.ProductCustom">
+			    	 <id column="pdid" property="pdid" jdbcType="VARCHAR" />
+				    <result column="odid" property="odid" jdbcType="VARCHAR" />
+				    <result column="disid" property="disid" jdbcType="VARCHAR" />
+				    <result column="commentid" property="commentid" jdbcType="VARCHAR" />
+				    <result column="pdtype" property="pdtype" jdbcType="VARCHAR" />
+				    <result column="pdname" property="pdname" jdbcType="VARCHAR" />
+				    <result column="pdprice" property="pdprice" jdbcType="REAL" />
+				    <result column="disprice" property="disprice" jdbcType="REAL" />
+				    <result column="createtime" property="createtime" jdbcType="DATE" />
+				    <result column="pdimage" property="pdimage" jdbcType="VARCHAR" />
+			    </association>
+		    </association>
+	    </collection>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    odid, orderid, odnumber, odprice
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="hpu.zyf.entity.OrderdetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orderdetail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderdetail
+    where odid = #{odid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from orderdetail
+    where odid = #{odid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="hpu.zyf.entity.OrderdetailExample" >
+    delete from orderdetail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="hpu.zyf.entity.Orderdetail" >
+    insert into orderdetail (odid, orderid, odnumber, 
+      odprice,pdid)
+    values (#{odid,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, #{odnumber,jdbcType=INTEGER}, 
+      #{odprice,jdbcType=REAL},#{pdid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="hpu.zyf.entity.Orderdetail" >
+    insert into orderdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="odid != null" >
+        odid,
+      </if>
+      <if test="orderid != null" >
+        orderid,
+      </if>
+      <if test="odnumber != null" >
+        odnumber,
+      </if>
+      <if test="odprice != null" >
+        odprice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="odid != null" >
+        #{odid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="odnumber != null" >
+        #{odnumber,jdbcType=INTEGER},
+      </if>
+      <if test="odprice != null" >
+        #{odprice,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="hpu.zyf.entity.OrderdetailExample" resultType="java.lang.Integer" >
+    select count(*) from orderdetail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update orderdetail
+    <set >
+      <if test="record.odid != null" >
+        odid = #{record.odid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderid != null" >
+        orderid = #{record.orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.odnumber != null" >
+        odnumber = #{record.odnumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.odprice != null" >
+        odprice = #{record.odprice,jdbcType=REAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update orderdetail
+    set odid = #{record.odid,jdbcType=VARCHAR},
+      orderid = #{record.orderid,jdbcType=VARCHAR},
+      odnumber = #{record.odnumber,jdbcType=INTEGER},
+      odprice = #{record.odprice,jdbcType=REAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="hpu.zyf.entity.Orderdetail" >
+    update orderdetail
+    <set >
+      <if test="orderid != null" >
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="odnumber != null" >
+        odnumber = #{odnumber,jdbcType=INTEGER},
+      </if>
+      <if test="odprice != null" >
+        odprice = #{odprice,jdbcType=REAL},
+      </if>
+    </set>
+    where odid = #{odid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hpu.zyf.entity.Orderdetail" >
+    update orderdetail
+    set orderid = #{orderid,jdbcType=VARCHAR},
+      odnumber = #{odnumber,jdbcType=INTEGER},
+      odprice = #{odprice,jdbcType=REAL}
+    where odid = #{odid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAllByUserid" resultMap="UserAndProductResultMap" parameterType="java.lang.String">
+  	SELECT * FROM USER u, userorder uo,orderdetail od ,productdetail pd
+ 		WHERE u.userid = uo.userid AND u.userid = #{userid,jdbcType=VARCHAR} 
+ 		AND od.pdid = pd.pdid
+ 		AND od.pdid = pd.pdid 
+ 		AND od.orderid = uo.orderid
+  </select>
+</mapper>

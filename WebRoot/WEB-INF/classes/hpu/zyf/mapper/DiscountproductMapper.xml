@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hpu.zyf.mapper.DiscountproductMapper" >
+  <resultMap id="BaseResultMap" type="hpu.zyf.entity.Discountproduct" >
+    <id column="disid" property="disid" jdbcType="VARCHAR" />
+    <result column="pdid" property="pdid" jdbcType="VARCHAR" />
+    <result column="starttime" property="starttime" jdbcType="DATE" />
+    <result column="endtime" property="endtime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    disid, pdid, starttime, endtime
+  </sql>
+  <select id="selectByExample" resultType="hpu.zyf.entity.vo.ProductCustom" parameterType="hpu.zyf.entity.Productdetail" >
+    select *
+    from discountproduct d , productdetail p
+	where
+    p.disid = d.disid
+    <if test="pdtype != null">
+	   and  p.pdtype like '%${pdtype}%'
+	</if>
+  	<include refid="myRowBoundsSQL"/>
+  </select>
+  <sql id="myRowBoundsSQL">
+	    <if test="rowBounds != null">
+	        limit ${rowBounds.offset}, ${rowBounds.limit}
+	    </if>
+    </sql>
+  <select id="selectByPrimaryKey" resultType="hpu.zyf.entity.vo.ProductCustom" parameterType="java.lang.String" >
+    select *  
+     from discountproduct d,productdetail p
+    WHERE d.pdid = p.pdid
+    and d.disid = #{disid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from discountproduct
+    where disid = #{disid,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByPdid" parameterType="java.lang.String" >
+    delete from discountproduct
+    where pdid = #{pdid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="hpu.zyf.entity.DiscountproductExample" >
+    delete from discountproduct
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="hpu.zyf.entity.vo.ProductdetailVo" >
+    insert into discountproduct (disid, pdid, starttime, 
+      endtime)
+    values (#{disid,jdbcType=VARCHAR}, #{pdid,jdbcType=VARCHAR}, #{starttime,jdbcType=DATE}, 
+      #{endtime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="hpu.zyf.entity.Discountproduct" >
+    insert into discountproduct
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="disid != null" >
+        disid,
+      </if>
+      <if test="pdid != null" >
+        pdid,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="disid != null" >
+        #{disid,jdbcType=VARCHAR},
+      </if>
+      <if test="pdid != null" >
+        #{pdid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="hpu.zyf.entity.DiscountproductExample" resultType="java.lang.Integer" >
+   SELECT COUNT(*) FROM discountproduct d , productdetail p WHERE p.disid = d.disid AND p.pdtype LIKE '%${pdtype}%' 
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update discountproduct
+    <set >
+      <if test="record.disid != null" >
+        disid = #{record.disid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdid != null" >
+        pdid = #{record.pdid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null" >
+        starttime = #{record.starttime,jdbcType=DATE},
+      </if>
+      <if test="record.endtime != null" >
+        endtime = #{record.endtime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update discountproduct
+    set disid = #{record.disid,jdbcType=VARCHAR},
+      pdid = #{record.pdid,jdbcType=VARCHAR},
+      starttime = #{record.starttime,jdbcType=DATE},
+      endtime = #{record.endtime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="hpu.zyf.entity.Discountproduct" >
+    update discountproduct
+    <set >
+      <if test="pdid != null" >
+        pdid = #{pdid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=DATE},
+      </if>
+    </set>
+    where disid = #{disid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hpu.zyf.entity.Discountproduct" >
+    update discountproduct
+    set pdid = #{pdid,jdbcType=VARCHAR},
+      starttime = #{starttime,jdbcType=DATE},
+      endtime = #{endtime,jdbcType=DATE}
+    where disid = #{disid,jdbcType=VARCHAR}
+  </update>
+</mapper>

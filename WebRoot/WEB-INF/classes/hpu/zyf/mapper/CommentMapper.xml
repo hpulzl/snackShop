@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hpu.zyf.mapper.CommentMapper" >
+  <resultMap id="BaseResultMap" type="hpu.zyf.entity.Comment" >
+    <id column="commentid" property="commentid" jdbcType="VARCHAR" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <result column="pdid" property="pdid" jdbcType="VARCHAR" />
+    <result column="commentscore" property="commentscore" jdbcType="REAL" />
+    <result column="conmmenttime" property="conmmenttime" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="hpu.zyf.entity.Comment" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    commentid, userid, commentscore, conmmenttime,pdid
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="hpu.zyf.entity.CommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="hpu.zyf.entity.CommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comment
+    where commentid = #{commentid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from comment
+    where commentid = #{commentid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="hpu.zyf.entity.CommentExample" >
+    delete from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="hpu.zyf.entity.Comment" >
+    insert into comment (commentid, userid, commentscore, 
+      conmmenttime, content,pdid)
+    values (#{commentid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{commentscore,jdbcType=REAL}, 
+      #{conmmenttime,jdbcType=DATE}, #{content,jdbcType=LONGVARCHAR},#{pdid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="hpu.zyf.entity.Comment" >
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        commentid,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="commentscore != null" >
+        commentscore,
+      </if>
+      <if test="conmmenttime != null" >
+        conmmenttime,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentid != null" >
+        #{commentid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentscore != null" >
+        #{commentscore,jdbcType=REAL},
+      </if>
+      <if test="conmmenttime != null" >
+        #{conmmenttime,jdbcType=DATE},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="hpu.zyf.entity.CommentExample" resultType="java.lang.Integer" >
+    select count(*) from comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update comment
+    <set >
+      <if test="record.commentid != null" >
+        commentid = #{record.commentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        userid = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentscore != null" >
+        commentscore = #{record.commentscore,jdbcType=REAL},
+      </if>
+      <if test="record.conmmenttime != null" >
+        conmmenttime = #{record.conmmenttime,jdbcType=DATE},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update comment
+    set commentid = #{record.commentid,jdbcType=VARCHAR},
+      userid = #{record.userid,jdbcType=VARCHAR},
+      commentscore = #{record.commentscore,jdbcType=REAL},
+      conmmenttime = #{record.conmmenttime,jdbcType=DATE},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update comment
+    set commentid = #{record.commentid,jdbcType=VARCHAR},
+      userid = #{record.userid,jdbcType=VARCHAR},
+      commentscore = #{record.commentscore,jdbcType=REAL},
+      conmmenttime = #{record.conmmenttime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="hpu.zyf.entity.Comment" >
+    update comment
+    <set >
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="commentscore != null" >
+        commentscore = #{commentscore,jdbcType=REAL},
+      </if>
+      <if test="conmmenttime != null" >
+        conmmenttime = #{conmmenttime,jdbcType=DATE},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where commentid = #{commentid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="hpu.zyf.entity.Comment" >
+    update comment
+    set userid = #{userid,jdbcType=VARCHAR},
+      commentscore = #{commentscore,jdbcType=REAL},
+      conmmenttime = #{conmmenttime,jdbcType=DATE},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where commentid = #{commentid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hpu.zyf.entity.Comment" >
+    update comment
+    set userid = #{userid,jdbcType=VARCHAR},
+      commentscore = #{commentscore,jdbcType=REAL},
+      conmmenttime = #{conmmenttime,jdbcType=DATE}
+    where commentid = #{commentid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectBypdid" resultType="hpu.zyf.entity.vo.CommentCustom" parameterType="java.lang.String" >
+   SELECT * FROM COMMENT c,USER u WHERE c.pdid = #{pdid,jdbcType=VARCHAR} AND u.userid = c.userid
+  </select>
+</mapper>
